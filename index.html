@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OLALA SKIBIDI CAR🚘</title>
+    <title>🚘 Mobil Nyetir & Tangkap Ikan 🐟</title>
     <style>
         body {
             margin: 0;
             padding: 0;
-            height: 800vh; /* Bisa scroll sampai 800 km */
-            background-color: #4CAF50; /* Hijau rumput */
+            height: 1500vh; /* Jalanan lebih panjang */
+            background-color: #4CAF50; /* Warna rumput */
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
@@ -21,15 +21,10 @@
             left: 50%;
             transform: translateX(-50%);
             width: 100px;
-            height: 800vh;
-            background-color: gray; /* Jalanan abu-abu */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 200px;
-            color: white;
+            height: 1500vh;
+            background-color: gray;
         }
-        #skibidiAbi {
+        #car {
             position: fixed;
             top: 50%;
             left: 50%;
@@ -45,38 +40,6 @@
             padding: 10px;
             border-radius: 5px;
         }
-        #cowboy {
-            position: absolute;
-            top: 800vh; /* Muncul di akhir scroll */
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 50px;
-            cursor: pointer;
-            display: none; /* Awalnya disembunyikan */
-        }
-        #questionBox {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            display: none;
-            text-align: center;
-        }
-        #okText {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 30px;
-            background-color: white;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            display: none;
-        }
         /* Rumah di kiri & kanan */
         .house {
             position: absolute;
@@ -88,79 +51,76 @@
         .house.right {
             right: 10%;
         }
-        /* Pohon di sekitar */
+        /* Pohon lebih banyak */
         .tree {
             position: absolute;
             font-size: 40px;
+        }
+        .tree:nth-child(odd) { left: 15%; }
+        .tree:nth-child(even) { right: 15%; }
+
+        /* Ikan di akhir jalan */
+        #fish {
+            position: absolute;
+            top: 1490vh; /* Muncul di akhir jalan */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 50px;
+            animation: fishMove 1s infinite alternate ease-in-out;
+            cursor: pointer;
+        }
+        /* Animasi ikan naik turun */
+        @keyframes fishMove {
+            0% { transform: translate(-50%, 0); }
+            100% { transform: translate(-50%, -20px); }
         }
     </style>
 </head>
 <body>
 
-    <div id="road">I</div>
-    <div id="skibidiAbi">🚘</div>
+    <div id="road"></div>
+    <div id="car">🚘</div>
     <div id="kmText">0 km</div>
-    <div id="cowboy" onclick="showQuestion()">🤠</div>
 
-    <!-- Rumah -->
+    <!-- Rumah di kiri & kanan -->
     <div class="house left">🏡</div>
     <div class="house right">🏡</div>
 
-    <!-- Pohon acak -->
-    <div class="tree" style="top: 100vh; left: 20%;">🌳</div>
-    <div class="tree" style="top: 150vh; right: 15%;">🌳</div>
-    <div class="tree" style="top: 250vh; left: 30%;">🌳</div>
-    <div class="tree" style="top: 300vh; right: 20%;">🌳</div>
-    <div class="tree" style="top: 400vh; left: 10%;">🌳</div>
-    <div class="tree" style="top: 500vh; right: 25%;">🌳</div>
-    <div class="tree" style="top: 600vh; left: 40%;">🌳</div>
+    <!-- Pohon lebih banyak -->
+    <script>
+        for (let i = 1; i <= 30; i++) { // Tambah banyak pohon
+            let tree = document.createElement("div");
+            tree.className = "tree";
+            tree.innerHTML = "🌳";
+            tree.style.top = (i * 50) + "vh";
+            document.body.appendChild(tree);
+        }
+    </script>
 
-    <!-- Box Pertanyaan -->
-    <div id="questionBox">
-        <p>Hello am I handsome?</p>
-        <button onclick="answerYes()">YES</button>
-        <button onclick="answerNo()">NO</button>
-    </div>
-
-    <!-- Tulisan "OK" setelah pencet YES -->
-    <div id="okText" onclick="hideOK()">OK</div>
+    <!-- Ikan di akhir -->
+    <div id="fish">🐟</div>
 
     <script>
+        let fish = document.getElementById("fish");
+        let following = false;
+
         // Update jumlah KM berdasarkan scroll
         window.addEventListener("scroll", function() {
             let km = Math.round(window.scrollY / window.innerHeight * 100);
             document.getElementById("kmText").innerText = km + " km";
 
-            // Kalau sudah sampai 800 km, munculkan 🤠
-            if (km >= 700) {
-                document.getElementById("cowboy").style.display = "block";
-            } else {
-                document.getElementById("cowboy").style.display = "none";
+            // Jika ikan mengikuti, dia akan mengikuti scroll pemain
+            if (following) {
+                fish.style.top = (window.scrollY + window.innerHeight / 2) + "px";
             }
         });
 
-        // Tampilkan pertanyaan saat klik 🤠
-        function showQuestion() {
-            document.getElementById("questionBox").style.display = "block";
-        }
-
-        // Jika jawab "YES"
-        function answerYes() {
-            document.getElementById("questionBox").style.display = "none";
-            document.getElementById("cowboy").style.display = "none";
-            document.getElementById("okText").style.display = "block";
-        }
-
-        // Jika jawab "NO"
-        function answerNo() {
-            document.getElementById("questionBox").style.display = "none";
-        }
-
-        // Jika klik "OK", tulisan OK hilang tapi KM tetap ada
-        function hideOK() {
-            document.getElementById("okText").style.display = "none";
-        }
+        // Klik ikan -> Mulai mengikuti pemain
+        fish.addEventListener("click", function() {
+            fish.style.animation = "fishMove 0.3s infinite alternate ease-in-out"; // Klepek lebih cepat
+            following = true;
+        });
     </script>
 
 </body>
-  </html>
+</html>
